@@ -1,20 +1,37 @@
-# 🚀 BehradB2 Autonomous Compiler & Fallback Router
+# BehradB2-AutoScientist 🧠🔬
 
-## 📖 Project Overview
-The BehradB2 Autonomous Compiler (codenamed B2-Compiler-Elite) is an advanced, high-performance proxy server designed to orchestrate Large Language Model (LLM) requests. Engineered specifically for environments that demand absolute reliability and zero downtime, it functions as a "cascading fallback router."
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Autonomous](https://img.shields.io/badge/mode-Fully%20Autonomous-purple.svg)]()
+(https://img.shields.io/badge/Routing-9Router%20Enabled-red.svg)]()
 
-When developing AI-driven applications or autonomous coding agents, relying on a single API endpoint often leads to critical failures due to rate limits, network timeouts, or upstream server errors. This system solves that problem. If a primary AI model experiences any disruption, the routing engine automatically catches the failure and seamlessly reroutes the prompt to the next available elite model in a pre-defined cascade stack, returning the output without the end-user or client application ever noticing the interruption.
+**BehradB2-AutoScientist** is a fully autonomous AI research scientist system. Designed to operate entirely without human intervention, it automatically invents, architects, codes, and documents standalone Python projects. By leveraging a multi-agent workflow and integrating seamlessly with intelligent local proxy routers like **9router**, BehradB2 runs in continuous cycles, generating production-ready code while evading standard API rate limits.
 
-## ✨ Core Mechanics and Features
-Built on top of the asynchronous FastAPI framework and utilizing LiteLLM for universal provider translation, this project creates a highly resilient, OpenAI-compatible endpoint. The architecture operates through two primary execution paths:
+---
 
-* **The Cascade Fallback Engine:** Triggered when a request targets the virtual `b2-compiler-elite` model. The engine attempts to process the prompt through a sequence of 5 elite tier models, enforcing a strict 20-second timeout per attempt to prevent process hanging.
-* **Direct Passthrough Mode:** For standard requests targeting specific models, the system intelligently prepends required prefixes and routes the request directly to the local upstream proxy.
+## 📑 Table of Contents
+1. [Core Architecture](#-core-architecture)
+2.(#-the-fallback-matrix-architecture)
+3.(#-9router-integration-crucial)
+4. [Installation Guide](#-installation-guide)
+5. [Usage & Autonomous Loop](#-usage--autonomous-loop)
+6. [Generated Artifacts](#-generated-artifacts)
 
-Additionally, the system features a custom `safe_stream_generator` that meticulously handles Server-Sent Events (SSE). It securely streams token chunks back to the client in real-time, catching any mid-stream interruptions and outputting clean JSON error packets to prevent socket deadlocks.
+---
+
+## 🏗️ Core Architecture
+
+The system operates on a tripartite multi-agent architecture controlled by a master looping mechanism:
+
+* **Agent 1 (The Ideation Engine):** Prompts the LLM to invent a novel, real-world Python script. The agent enforces strict JSON schema outputs and utilizes regex parsing (`re.DOTALL`) to extract the architectural blueprint safely.
+* **Agent 2 (The Autonomous Coder):** Orchestrates the `aider` CLI tool via background subprocesses. It automatically initializes Git repositories, bypasses interactive prompts (`--yes-always`), and compiles the code based on the generated blueprint.
+* **Agent 3 (The Documentation Engine):** Finalizes the project by generating structured Markdown documentation and an ISO-timestamped `run_metadata.json` file for rigorous auditing.
+
+---
 
 ## 🧠 The Fallback Matrix Architecture
-The cascade is intentionally structured to balance supreme reasoning capabilities with ultra-low latency fallback options:
+
+The cascade is intentionally structured to balance supreme reasoning capabilities with cost-efficiency, targeting the following models in sequence via the local proxy:
 
 | Priority Layer | Target Model | Upstream Provider Identity |
 | :--- | :--- | :--- |
@@ -24,60 +41,70 @@ The cascade is intentionally structured to balance supreme reasoning capabilitie
 | **4 (Quaternary)**| Gemini 1.5 Pro | `gemini/gemini-1.5-pro` |
 | **5 (Terminal)** | Llama 3.3 70B | `groq/llama-3.3-70b-versatile` |
 
-## 🛠 Installation Guide
+---
+
+## 🌐 9Router Integration (Crucial)
+
+To execute continuous autonomous loops without exhausting your API quotas, BehradB2 is heavily optimized to run through **9router**, an intelligent multi-provider proxy.
+
+### What is 9router?
+9router is a local, MIT-licensed AI gateway that intercepts your script's API calls and distributes them intelligently across 40+ LLM providers. Instead of connecting directly to OpenAI or Anthropic, BehradB2 connects to `http://localhost:20129/v1/chat/completions`. 
+
+### Why is it required?
+* **Rate Limit Evasion:** 9router utilizes a multi-tier fallback system. If your primary paid tier fails, it instantly falls back to cheaper alternatives, and then to free tiers, ensuring the BehradB2 loop never crashes mid-generation.
+* **Token Compression (RTK):** Through Rust Token Killer (RTK) integration, 9router compresses complex tool outputs and Git diffs by 20-40% before sending them to the LLM, drastically reducing your operational costs.
+* **Caveman Mode:** Strips conversational filler from the LLM, returning raw, actionable code and saving up to 65% on output tokens.
+
+### How BehradB2 uses it:
+The script automatically redirects the coding subprocesses to your local 9router instance using the `--openai-api-base` flag. Ensure your 9router instance is running prior to launching the system.
+
+---
+
+## 🛠️ Installation Guide
+
 Ensure you have Python 3.9+ installed on your deployment server.
 
 1. Clone the repository and navigate into the directory:
 ```bash
-git clone [https://github.com/YourUsername/ProjectName.git](https://github.com/YourUsername/ProjectName.git)
-cd ProjectName
+git clone [https://github.com/YourUsername/BehradB2-AutoScientist.git](https://github.com/YourUsername/BehradB2-AutoScientist.git)
+cd BehradB2-AutoScientist
 ```
 
 2. Create and activate a Python virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 3. Install all required dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-*Configure your API authorization credentials (see Security section).*
 
-## 🚀 Usage Instructions
-To initialize the autonomous compiler, simply run the core Python script:
-```bash
-python B2-Compiler-Elite.py
-```
-The server will initialize on port `20129`, display a custom ANSI-styled diagnostic banner, and actively listen for incoming REST API requests.
+4. **Configure the Environment:**
+Open `auto_researcher.py` and ensure the `ROUTER_URL` matches your active local proxy (default: `http://localhost:20129/v1/chat/completions`). 
 
-### Integration with Aider (Autonomous AI Coding Agent)
-To utilize the fallback resilience of this compiler within aider, execute the following command in your terminal:
+---
+
+## 🚀 Usage & Autonomous Loop
+
+To bring the AI Scientist online, simply execute the main script:
+
 ```bash
-aider --openai \
-      --openai-api-base http://localhost:20129/v1 \
-      --openai-api-key sk-33c30ed152582727-i4wntx-55470e71 \
-      --model B2-Compiler-Elite
+python auto_researcher.py
 ```
 
-### Standard REST API Request (with Streaming)
-You can interface directly with the compiler using standard HTTP clients like cURL. To receive the response in real-time chunks, set `"stream": true`:
-```bash
-curl -X POST http://localhost:20129/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-33c30ed152582727-i4wntx-55470e71" \
-  -d '{
-    "model": "b2-compiler-elite",
-    "messages": [
-      {"role": "user", "content": "Explain the concept of quantum entanglement."}
-    ],
-    "stream": true
-  }'
-```
+The system will clear the terminal, display the BehradB2 initialization banner, and begin its autonomous cycles. By default, it runs a single cycle, but this can be modified in the `start_autonomous_loop(cycles=N)` function at the entry point.
 
-## 📊 Terminal User Interface (Observability)
-To assist developers in monitoring the system without relying on complex external logging stacks, the system includes a custom TUI built directly into the standard output. It suppresses noisy background logs and highlights critical metrics: prompt summaries in cyan, successful token streams and execution times in green, routing transitions in yellow, and critical security or timeout failures in bold red.
+---
 
-## 🤝 Contributing
-We welcome community contributions. Whether it's adding new models to the fallback matrix, enhancing streaming throughput, or strengthening security protocols, please feel free to fork the repository, commit your updates to a new branch, and submit a Pull Request for review.
+## 📂 Generated Artifacts
+
+For every successful cycle, a new directory is spawned in `Projects_BehradB2/`. 
+Inside each timestamped directory, you will find:
+* `.git/` (Initialized repository)
+* `main.py` (The fully commented, production-ready code)
+* `README.md` (Project-specific documentation)
+* `run_metadata.json` (Execution logs and LLM blueprints)
+
+> **Creator & Architect:** Behrad - System and workflow generated autonomously by BehradB2.
